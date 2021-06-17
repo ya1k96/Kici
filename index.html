@@ -14,42 +14,69 @@
     <div class="text-center total py-4">
         <p class="font-medium text-white text-center text-2xl">Mi saldo</p>
         <h2 class="font-medium text-indigo-600 text-5xl oldstyle-nums"><span class="text-2xl">$</span>
-        <template v-if="loaded">{{miSaldo}}</template>
+        <template v-if="loaded">{{saldo}}</template>
         <template v-else>0</template>
         </h2>
     </div>
     <ul class="flex justify-center">
         <li class="mx-12">
-        <button class="rounded-full block w-14 h-14 py-3 text-center font-medium text-white bg-indigo-600 hover:bg-indigo-400"><i class="las la-plus-circle"></i></button>
-        <p class="font-medium text-white text-2xl">ingreso</p>
+            <button class="rounded-full block w-14 h-14 py-3 text-center font-medium text-white bg-indigo-600 hover:bg-indigo-400" @click="toggleModalIngreso"><i class="las la-plus-circle"></i></button>
+            <p class="font-medium text-white text-2xl" >ingreso</p>
         </li>
         <li class="mx-12">
-        <button class="rounded-full block w-14 h-14 py-3 text-center font-medium text-white bg-indigo-600 hover:bg-indigo-400"><i class="las la-minus-circle"></i></button>
-        <p class="font-medium text-white text-2xl">gasto</p>
+            <button class="rounded-full block w-14 h-14 py-3 text-center font-medium text-white bg-indigo-600 hover:bg-indigo-400" @click="toggleModalGasto"><i class="las la-minus-circle"></i></button>
+            <p class="font-medium text-white text-2xl">gasto</p>
         </li>
     </ul>
-<div class="grid grid-cols-1 place-items-center mt-9">
-    <div class=" shadow rounded-md p-4 max-w-sm w-full mx-auto" v-if="!loaded">
-        <div class="animate-pulse flex space-x-4">
-            <div class="rounded-full bg-blue-400 h-12 w-12"></div>
-            <div class="flex-1 space-y-4 py-1">
-                <div class="h-4 bg-indigo-400 rounded w-3/4"></div>
-                <div class="space-y-2">
-                    <div class="h-4 bg-indigo-400 rounded"></div>
-                    <div class="h-4 bg-indigo-400 rounded w-5/6"></div>
+<div class="grid grid-cols-1 place-items-center mt-9 max-h-96 md:max-h-80" style="overflow-y: scroll;">
+    <template v-if="!loaded">
+        <div class=" shadow rounded-md p-4 max-w-sm w-full mx-auto">
+            <div class="animate-pulse flex space-x-4">
+                <div class="rounded-full bg-blue-400 h-12 w-12"></div>
+                <div class="flex-1 space-y-4 py-1">
+                    <div class="h-4 bg-indigo-400 rounded w-3/4"></div>
+                    <div class="space-y-2">
+                        <div class="h-4 bg-indigo-400 rounded"></div>
+                        <div class="h-4 bg-indigo-400 rounded w-5/6"></div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+        <div class=" shadow rounded-md p-4 max-w-sm w-full mx-auto">
+            <div class="animate-pulse flex space-x-4">
+                <div class="rounded-full bg-blue-400 h-12 w-12"></div>
+                <div class="flex-1 space-y-4 py-1">
+                    <div class="h-4 bg-indigo-400 rounded w-3/4"></div>
+                    <div class="space-y-2">
+                        <div class="h-4 bg-indigo-400 rounded"></div>
+                        <div class="h-4 bg-indigo-400 rounded w-5/6"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class=" shadow rounded-md p-4 max-w-sm w-full mx-auto">
+            <div class="animate-pulse flex space-x-4">
+                <div class="rounded-full bg-blue-400 h-12 w-12"></div>
+                <div class="flex-1 space-y-4 py-1">
+                    <div class="h-4 bg-indigo-400 rounded w-3/4"></div>
+                    <div class="space-y-2">
+                        <div class="h-4 bg-indigo-400 rounded"></div>
+                        <div class="h-4 bg-indigo-400 rounded w-5/6"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </template>
     <template v-if="lista.length > 0">
-        <div class="container flex place-content-around py-3 hover:bg-gray-800 cursor-pointer animate__animated animate__fadeInDown"
-        v-for="item in lista">
+        <div class="container px-5 flex place-content-between py-3 hover:bg-gray-800 cursor-pointer animate__animated animate__fadeInDown"
+        v-for="item in lista" @click="mosInfo(item.id)">
             <div class="flex place-content-center">
-                <div class="bg-white w-12 rounded-full text-center"><p class="text-3xl text-green-600">
-                    <i class="las la-barcode"></i>
-                </p></div>
+                <div class="bg-white w-12 rounded-full text-center">
+                    <p class="text-3xl text-green-600 font-medium">$</p>
+                </div>
                 <div class="ml-3">
-                    <p class="text-xl font-medium text-white">{{item.name}}</p>
+                    <p class="text-xl font-medium text-white min-w-full">{{item.name}}</p>
                     <p class="text-sm text-gray-400">21/05/2020</p>
                 </div>
             </div>
@@ -63,10 +90,14 @@
     <template v-else>
         <p class="text-xl font-medium text-white">No tenes actividad reciente</p>
     </template>
+    <Modal class="animate__animated animate__fadeIn" v-if="showModal" v-on:close="showModal = !showModal" v-on:save="saveItem" :type="type"></Modal>
+    <Modal-item class="animate__animated animate__fadeIn" v-if="showModalItem"></Modal-item>
 </div>
 </div>
 </div>
 </body>
 <script src="./vue.js" ></script>
+<script src="./components/modal.component.js"></script>
+<script src="./components/modalItem.component.js"></script>
 <script src="./index.js"></script>
 </html>
